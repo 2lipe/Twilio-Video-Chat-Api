@@ -18,11 +18,9 @@ namespace Api.Service
     {
         readonly TwilioSettings _twilioSettings;
 
-        public VideoService(Microsoft.Extensions.Options.IOptions<TwilioSettings> options)
+        public VideoService(TwilioSettings settings)
         {
-            var twilioOptions = options.Value ?? throw new ArgumentNullException(nameof(options));
-
-            _twilioSettings = twilioOptions;
+            _twilioSettings = settings ?? throw new ArgumentNullException(nameof(settings));
 
             TwilioClient.Init(_twilioSettings.ApiKey, _twilioSettings.ApiSecret);
         }
