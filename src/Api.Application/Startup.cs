@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Application
 {
@@ -31,6 +33,23 @@ namespace Application
             services.AddAppServices(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.AddSwaggerGen(c =>
+            {
+
+                c.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "Twilio Video Chat",
+                        Version = "v1",
+                        Description = "Exemplo de API REST criada com o ASP.NET Core 3.1 para chamadas de video utilizando o Twilio",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Felipe Vieira",
+                            Url = new Uri("https://github.com/2lipe")
+                        }
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +59,13 @@ namespace Application
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Twilio Video Chat V1");
+            });
 
             app.UseHttpsRedirection();
 
